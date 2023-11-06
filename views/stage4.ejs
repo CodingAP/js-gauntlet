@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./includes/head', { stageNumber: 4 }) %>
+</head>
+
+<body>
+    <%- include('./includes/header', { stageNumber: 4, stageTitle: 'Puzzle Pieces' }) %>
+        <div style="text-align: center;">
+            <h2>Move selector with arrow keys, select and swap with space</h2>
+            <canvas width="800" height="500" style="border: 1px solid black;"></canvas><br />
+            <span id="piece-location">Actual Location: N/A</span><br />
+            <span id="flag"></span>
+        </div>
+        <script>
+            const canvas = document.querySelector('canvas');
+            const context = canvas.getContext('2d');
+
+            (() => {
+                let width = 40;
+                let height = 25;
+                let pieces = [];
+                let hovered = 0;
+                let selected = -1;
+
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        let index = y * width + x;
+                        pieces[index] = { color: `hsl(${Math.floor(index / (width * height) * 360)} 100% 50%)`, location: { x, y } };
+                    }
+                }
+
+                pieces = pieces.sort((a, b) => 0.5 - Math.random());
+
+                let loop = () => {
+                    context.fillStyle = '#aaa';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+
+                    let tileWidth = canvas.width / width;
+                    let tileHeight = canvas.height / height;
+                    for (let y = 0; y < height; y++) {
+                        for (let x = 0; x < width; x++) {
+                            let index = y * width + x;
+                            context.fillStyle = pieces[index].color;
+                            context.fillRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                        }
+                    }
+
+                    for (let y = 0; y < height; y++) {
+                        for (let x = 0; x < width; x++) {
+                            let index = y * width + x;
+
+                            if (selected == index) {
+                                context.strokeStyle = '#000';
+                                context.lineWidth = 7;
+                                context.strokeRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                            } else if (hovered == index) {
+                                context.strokeStyle = '#fff';
+                                context.lineWidth = 7;
+                                context.strokeRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                            }
+                        }
+                    }
+
+                    document.querySelector('#piece-location').innerHTML = `Actual Location: (${pieces[hovered].location.x}, ${pieces[hovered].location.y})`;
+
+                    window.requestAnimationFrame(loop);
+                }
+
+                window.addEventListener('keydown', event => {
+                    if (event.key == 'ArrowUp') {
+                        hovered -= width;
+                        if (hovered < 0) hovered += width;
+                    }
+
+                    if (event.key == 'ArrowDown') {
+                        hovered += width;
+                        if (hovered >= (width * height)) hovered -= width;
+                    }
+
+                    if (event.key == 'ArrowLeft') {
+                        hovered -= 1;
+                        if (hovered < 0 || hovered % width == width - 1) hovered += 1;
+                    }
+
+                    if (event.key == 'ArrowRight') {
+                        hovered += 1;
+                        if (hovered >= (width * height) || hovered % width == 0) hovered -= 1;
+                    }
+
+                    if (event.key == ' ') {
+                        if (selected == -1) selected = hovered;
+                        else {
+                            let temp = JSON.stringify(pieces[selected]);
+                            pieces[selected] = pieces[hovered];
+                            pieces[hovered] = JSON.parse(temp);
+                            selected = -1;
+
+                            let sorted = true;
+                            for (let y = 0; y < height; y++) {
+                                for (let x = 0; x < width; x++) {
+                                    let index = y * width + x;
+                                    if (!(pieces[index].location.x == x && pieces[index].location.y == y)) {
+                                        sorted = false;
+                                    }
+                                }
+                            }
+
+                            if (sorted) {
+                                fetch('/api/stage4-flag').then(response => response.text()).then(text => {
+                                    document.querySelector('#flag').innerHTML = text;
+                                });
+                            }
+                        }
+                    }
+                });
+
+                loop();
+            })();
+        </script>
+</body>
+
+</html>

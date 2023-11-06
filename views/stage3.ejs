@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./includes/head', { stageNumber: 3 }) %>
+</head>
+
+<body>
+    <%- include('./includes/header', { stageNumber: 3, stageTitle: 'Button Maze' }) %>
+    <div style="text-align: center;">
+        <% if (invalid) { %>
+            <h2>You are in a invalid location! Go back to the beginning!</h2>
+        <% } else { %>
+            <h2>Where to go next?</h2>
+            <% if (directions.n) { %>
+                <button id="north">North</button>
+            <% } %>
+            <% if (directions.s) { %>
+                <button id="south">South</button>
+            <% } %>
+            <% if (directions.e) { %>
+                <button id="east">East</button>
+            <% } %>
+            <% if (directions.w) { %>
+                <button id="west">West</button>
+            <% } %>
+            <% if (flag.length > 0) { %>
+                <span><%- flag %></span>
+            <% } %>
+        <% } %>
+        <br />
+        <button id="beginning">Back to Beginning</button>
+    </div>
+    <script>
+        let currentDirections = '';
+        window.addEventListener('load', () => {
+            let tokens = window.location.pathname.split('/');
+            if (tokens[tokens.length - 1] != '3') {
+                currentDirections = tokens[tokens.length - 1];
+            }
+        });
+
+        document.querySelector('#beginning').addEventListener('click', () => {
+            window.location.href = window.location.origin + '/stage/3';
+        });
+
+        <% if (directions.n && !invalid) { %>
+            document.querySelector('#north').addEventListener('click', () => {
+                window.location.href = window.location.origin + '/stage/3/' + currentDirections + 'n';
+            });
+        <% } %>
+        <% if (directions.s && !invalid) { %>
+            document.querySelector('#south').addEventListener('click', () => {
+                window.location.href = window.location.origin + '/stage/3/' + currentDirections + 's';
+            });
+        <% } %>
+        <% if (directions.e && !invalid) { %>
+            document.querySelector('#east').addEventListener('click', () => {
+                window.location.href = window.location.origin + '/stage/3/' + currentDirections + 'e';
+            });
+        <% } %>
+        <% if (directions.w && !invalid) { %>
+            document.querySelector('#west').addEventListener('click', () => {
+                window.location.href = window.location.origin + '/stage/3/' + currentDirections + 'w';
+            });
+        <% } %>
+    </script>
+</body>
+
+</html>

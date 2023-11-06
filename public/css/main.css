@@ -1,0 +1,10 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-container {
+    text-align: center;
+    background-color: lightblue;
+    border-radius: 20px;
+    padding: 10px;
+}

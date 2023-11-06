@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./includes/head', { stageNumber: 2 }) %>
+</head>
+
+<body>
+    <%- include('./includes/header', { stageNumber: 2, stageTitle: 'Password Validator' }) %>
+    <div style="text-align: center; background-color: lightgray; padding: 20px; margin: 50px;">
+        <h2>Login to System:</h2><br />
+        Username: <input type="text" id="username"><br />
+        Password: <input type="password" id="password"><br />
+        <button id="login-button">Login</button><br />
+        <span id="feedback" style="color: red;"></span>
+    </div>
+
+    <script id="stage2-script">
+        const wtf = new Array(15).fill(0).map(_ => Math.floor(Math.random() * document.querySelector('#stage2-script').innerHTML.length))
+        
+        document.querySelector('#login-button').addEventListener('click', () => {
+            const username = document.querySelector('#username').value;
+            const password = document.querySelector('#password').value;
+
+            if (username != 'razorpower') {
+                document.querySelector('#feedback').innerHTML = 'Incorrect username!';
+                return;
+            }
+
+            for (let i = 0; i < wtf.length; i++) {
+                let condition = document.querySelector('#stage2-script').innerHTML[wtf[i]];
+                if (condition === ' ' || condition === '\n' || condition === '\r' || condition === '\t') condition = '.';
+                if (password[i] != condition) {
+                    document.querySelector('#feedback').innerHTML = 'Incorrect password!';
+                    return;
+                }
+            }
+
+            fetch('/api/check-stage2', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ password, wtf })
+            })
+            .then(response => response.text())
+            .then(flag => {
+                document.querySelector('#feedback').innerHTML = flag;
+            });
+        });
+    </script>
+</body>
+
+</html>
