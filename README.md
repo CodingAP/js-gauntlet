@@ -21,9 +21,10 @@ Flag: `flag{t00_m4ny_l3tt3r5_83201}`
 ### Challenge #3 - Button Maze
 > Oooooo, this looks like one of the old style text-based RPGs. Why don't you try it?
 
-Each site will have a North, South, East, West option, and you have to find the correct way. The correct way will be SSEEESSWWN. I intend them to find it by navigating it like the olden days.
+Each site will have a North, South, East, West option, and you have to find the correct way. The correct way will be SSEEESSWWN. I intend them to find it by navigating it like the olden days of text-based RPGs.
 
 MAZE:
+```
 +----------+
 | X-+-+-+-o|
 | | o | | o|
@@ -31,12 +32,13 @@ MAZE:
 |  O |+-+-+|
 | o+-+    o|
 +----------+
+```
 
 Flag: `flag{1t5_l1k3_a_c0rn_m4z3_32901}`
 
 ### Challenge #4 - Puzzle Pieces
 > Have you ever tried a 100 piece puzzle? Those are fun. This may not be...
 
-This is a 1000 piece puzzle that has very differe colored pieces. There is no way they are solving the puzzle normally, so they have to sort the pieces by smallest RGB to largest in the array (just adding the three values will work).
+This is a 1000 piece puzzle that has very differently colored pieces. There is no way they are solving the puzzle manually (actually some one did so eh), so they have to simulate the keyboard to do the puzzle. Each piece tells where it is supposed to go, so you can solve it from there.
 
 Flag: `flag{l0t5_0f_c0l0r5_s0rry_21023}`
