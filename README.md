@@ -2,6 +2,9 @@
 
 ### by AP
 
+### Writeup
+https://codingap.github.io/blog/posts/razorhack-ctf/
+
 ## Challenges
 
 ### Challenge #1 - Where is Anything?
